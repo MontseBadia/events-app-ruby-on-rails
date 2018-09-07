@@ -1,0 +1,16 @@
+<header id="content-header">
+  <h1>Registrations for <%= link_to(@event.name, @event) %></h1>
+</header>
+
+<ol id="registrations">
+  <% @registrations.each do |registration| %>
+    <li>
+      <%= mail_to(registration.email, registration.name) %>
+      (<%= registration.how_heard %>)
+    </li>
+    <%= link_to 'Edit', edit_event_registration_path(@event, registration), class: 'button' %>
+    <%= link_to 'Delete', event_registration_path(@event, registration),
+                    class: 'button',
+                    method: :delete, data: { confirm: 'Are you sure?' } %>
+  <% end %>
+</ol>
