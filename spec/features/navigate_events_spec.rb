@@ -1,18 +1,23 @@
 require "rails_helper"
 
 describe "navigating events" do
+  before do  
+    admin = User.create(user_attributes(admin: true))
+    sign_in(admin)
+  end
+  
   it "allows navigation from detail page to listing page" do
     event = Event.create(event_attributes)
 
     visit event_url(event)
 
-    click_link "All Events"
+    click_link "Upcoming Events"
 
     expect(current_path).to eq(events_path)
   end
 
   it "allows navigation from listing page to detail page" do
-    event = Event.create(event_attributes)
+    event = Event.create(event_attributes(name: 'Yepa'))
 
     visit events_url
 

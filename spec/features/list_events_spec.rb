@@ -11,12 +11,14 @@ describe "viewing the list of events" do
                           location: "Texas",
                           price: 15.00,
                           description: 'A fun evening of fdksaf fdksajf fjdsjfmlf ftueo j.',
-                          starts_at: 15.days.from_now)
+                          starts_at: 15.days.from_now, 
+                          slug: 'l')
     event3 = Event.create(name: "Kata Camp",
                           location: "Dallas",
                           price: 75.00,
                           description: 'A fun evening of fdksaf fdksajf fjdsjfmlf ftueo j.',
-                          starts_at: 30.days.from_now)
+                          starts_at: 30.days.from_now,
+                          slug: 'a')
     
     visit events_url
 
@@ -32,7 +34,7 @@ describe "viewing the list of events" do
   end
 
   it "does not show a past event" do
-    event = Event.create(event_attributes(starts_at: 1.week.ago))
+    event = Event.create(event_attributes(name: 'Yepa!', starts_at: 1.week.ago))
 
     visit events_url
 

@@ -30,4 +30,35 @@ describe "viewing an individual event" do
 
     expect(page).to have_text("Free")
   end
+
+  it "displays the event likers and categories in the sidebar" do 
+    event = Event.create(event_attributes)
+    category = Category.create!(name: 'Rails')
+    user = User.create!(user_attributes)
+    sign_in(user)
+
+    event.likers << user
+    event.categories << category
+
+    visit event_path(event)
+
+    within("aside#sidebar") do 
+      expect(page).to have_text(user.name)
+      expect(page).to have_text(category.name)
+    end
+  end
+
+  it "includes event title in the page title" do
+    event = Event.create(event_attributes(name: 'Yepa'))
+
+    visit event_path(event)
+    expect(page).to have_title("Events - #{event.name}")
+  end
+
+  it "has a friendly URL" do
+    event = Event.create!(event_attributes(name: 'Tomorrow Crazy'))
+
+    visit event_path(event)
+    expect(current_path).to eq("/events/tomorrow-crazy")
+  end
 end

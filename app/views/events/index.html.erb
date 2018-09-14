@@ -32,4 +32,10 @@
   <% end %>
 </ul>
 
+<% content_for(:side) do %>
+  <ul>
+    <%= render @categories %>
+  </ul>
+<% end %>
+
 <%# <%= render 'footer' %>

@@ -1,0 +1,6 @@
+<li>
+  <%= category.name %>
+  <div>
+    <%= category.events.map(&:name).join(', ') %>
+  </div>
+</li>

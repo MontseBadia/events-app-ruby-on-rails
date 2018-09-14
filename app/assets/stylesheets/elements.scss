@@ -24,6 +24,11 @@ a:visited {
 a:hover,
 a:active {
   text-decoration: none;
-  color: $secondary-link-color;
-  background: $secondary-background-color;
+  color: rgb(143, 49, 49);
+  background: $secondary-link-color;
 }
+
+a.active {
+  color: rgb(143, 49, 49);
+}
+

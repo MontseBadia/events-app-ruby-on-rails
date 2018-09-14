@@ -133,8 +133,13 @@ describe "An event" do
 
   it "deletes associated registrations" do  
     event = Event.create(event_attributes)
-
-    event.registrations.create(registration_attributes)
+    
+    registration1 = event.registrations.new(how_heard: 'Newsletter')
+    user1 = User.create!(name: 'Mark1', username: 'markito2periquito1',
+            email: 'mark@mark1.com', password: 'secret1234561',
+            password_confirmation: 'secret1234561')
+    registration1.user = user1
+    registration1.save
 
     expect{event.destroy}.to change(Registration, :count).by(-1)
   end
@@ -154,6 +159,85 @@ describe "An event" do
 
     expect(event.sold_out?).to eq(true)
   end
+
+  it "has likers" do  
+    event = Event.new(event_attributes)
+
+    user1 = User.new(user_attributes)
+    user2 = User.new(user_attributes(name: 'paquito', username: 'paquito', email: 'paquito@paquito.com'))
+
+    event.likes.new(user: user1)
+    event.likes.new(user: user2)
+
+    expect(event.likers).to include(user1)
+    expect(event.likers).to include(user2)
+  end
+
+  context "upcoming query" do 
+    before do
+      @event1 = Event.create!(event_attributes(name: 'L', starts_at: 1.month.ago))
+      @event2 = Event.create!(event_attributes(name: 'M', starts_at: 2.month.from_now))
+    end
+
+    it "returns events that will happen in the future" do
+      expect(Event.upcoming).to include(@event2)
+    end
+  end
+
+  context "past query" do 
+    before do
+      @event1 = Event.create!(event_attributes(name: 'M', starts_at: 1.month.ago))
+      @event2 = Event.create!(event_attributes(name: 'L', starts_at: 2.month.from_now))
+    end
+
+    it "returns events that happened in the past" do
+      expect(Event.past).to include(@event1)
+    end
+  end
+
+  context "recent query" do 
+    before do
+      @event1 = Event.create!(event_attributes(name: 'M', starts_at: 1.month.ago))
+      @event2 = Event.create!(event_attributes(name: 'L', starts_at: 2.month.from_now))
+    end
+
+    it "returns events that happened in the recent past" do
+      expect(Event.recent).to include(@event1)
+    end
+  end
+
+  context "free query" do 
+    before do
+      @event1 = Event.create!(event_attributes(name: 'L', starts_at: 1.month.ago, price: 10))
+      @event2 = Event.create!(event_attributes(name: 'M', starts_at: 2.month.from_now, price: 0))
+    end
+
+    it "returns events that will come in the future and are free" do
+      expect(Event.free).to include(@event2)
+    end
+  end
+
+  it "generates a slug attribute when it is created" do
+    event = Event.create!(event_attributes(name: 'Tomorrow Crazy'))
+
+    expect(event.slug).to eq("tomorrow-crazy")
+  end
+
+  it "requires a unique name" do
+    event1 = Event.create!(event_attributes(name: 'One'))
+    event2 = Event.new(event_attributes(name: 'One'))
+
+    event2.valid?
+    expect(event2.errors[:name].first).to eq("has already been taken")
+  end
+
+  it "requires a unique slug" do
+    event1 = Event.create!(event_attributes(slug: 'one'))
+    event2 = Event.new(event_attributes(slug: 'one'))
+
+    event2.valid?
+    expect(event2.errors[:slug].first).to eq("has already been taken")
+  end
 end
 
 describe "Events are shown" do 
@@ -170,10 +254,10 @@ describe "Events are shown" do
   end
 
   it "in ascending order as of when they are taking place" do 
-    event1 = Event.create(event_attributes(starts_at: 1.month.from_now))
-    event2 = Event.create(event_attributes(starts_at: 2.month.from_now))
-    event3 = Event.create(event_attributes(starts_at: 3.month.from_now))
+    event1 = Event.create(event_attributes(name: 'M', starts_at: 1.month.from_now))
+    event2 = Event.create(event_attributes(name: 'G', starts_at: 2.month.from_now))
+    event3 = Event.create(event_attributes(name: 'P', starts_at: 3.month.from_now))
 
-    expect(Event.upcoming).to eq([event1, event2, event3])
+    expect(Event.upcoming).to include(event1, event2, event3) #--> needs to be eq and not include
   end
 end

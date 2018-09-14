@@ -1,0 +1,24 @@
+<header id="content-header">
+  <h1>Sign in</h1>
+</header>
+
+<%= form_tag(session_path) do %>
+<fieldset>
+  <p>
+    <%= label_tag :email_or_username, "Email / Username" %> <!-- we can give the name we want -->
+    <%= text_field_tag :email_or_username, nil, autofocus: true, required: true %>
+  </p>
+  <p>
+    <%= label_tag :password %>
+    <%= password_field_tag :password, nil, required: true %> <!-- nil -> no value is passed -->
+  </p>
+  <p>
+    <%= submit_tag "Sign In" %>
+  </p>
+</fieldset>
+<% end %>
+
+<p>
+  Don't have an account yet?
+  <%= link_to "Sign up here", signup_path %>
+</p>

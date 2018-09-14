@@ -13,27 +13,29 @@ describe "A registration" do
     event = Event.new(event_attributes)
 
     registration = Registration.new(registration_attributes)
-
     registration.event = event
+    user = User.create!(user_attributes)
+    registration.user = user
+    registration.save
 
     expect(registration.valid?).to eq(true)
   end
 
-  it "requires a name" do 
-    registration = Registration.new(name: '')
+  # it "requires a name" do 
+  #   registration = Registration.new(name: '')
 
-    registration.valid?
+  #   registration.valid?
 
-    expect(registration.errors[:name].any?).to eq(true)
-  end
+  #   expect(registration.errors[:name].any?).to eq(true)
+  # end
   
-  it "requires an email" do 
-    registration = Registration.new(email: '')
+  # it "requires an email" do 
+  #   registration = Registration.new(email: '')
 
-    registration.valid?
+  #   registration.valid?
 
-    expect(registration.errors[:email].any?).to eq(true)
-  end
+  #   expect(registration.errors[:email].any?).to eq(true)
+  # end
 
   it "requires a how heard" do 
     registration = Registration.new(how_heard: '')

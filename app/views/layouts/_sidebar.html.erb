@@ -2,11 +2,29 @@
   <nav>
     <ul>  
       <li class="upcoming-events">
-        <%= link_to "All Events", events_path, class: 'button' %>
+        <%= nav_link_to "Upcoming Events", events_path %>
       </li>
+      <li class="upcoming-events">
+        <%= nav_link_to "Recent Events", filtered_events_path(:recent) %>
+      </li>
+      <li class="upcoming-events">
+        <%= nav_link_to "Past Events", filtered_events_path(:past) %>
+      </li>
+      <li class="upcoming-events">
+        <%= nav_link_to "Free Events", filtered_events_path(:free) %>
+      </li>
+      <% if current_user_admin? %>
       <li class="create-event">
-        <%= link_to 'Add New Event', new_event_path, class: 'button' %>
+        <%= nav_link_to 'Add New Event', new_event_path %>
       </li>
+      <% end %>
     </ul>
+    <%# <ul>
+      <li><%= link_to 'Free Events', free_events_path %>
+      <%# <%= render 'events/free_events' %>
+    <%# </ul> %> 
   </nav>
+
+  <%= content_for(:side) %>
+
 </aside>

@@ -32,6 +32,15 @@
         <%= f.text_field :image_file_name, size: 30, 
                          placeholder: "GIF, JPG, or PNG file name" %>
       </li>
+      <li>
+        <%= f.collection_check_boxes(:category_ids, Category.all, :id, :name) %>
+      </li>
+      <li>
+        <%= link_to "Add Category", new_category_path %>
+      </li>
+      <%# <li>
+        <%= link_to "Edit Categories", edit_category_path %>
+      <%# </li> %>
     </ol>
     <p>
       <%= f.submit %>

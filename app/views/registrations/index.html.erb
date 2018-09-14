@@ -5,7 +5,12 @@
 <ol id="registrations">
   <% @registrations.each do |registration| %>
     <li>
-      <%= mail_to(registration.email, registration.name) %>
+      <%= profile_image_for(registration.user, size: 35) %>
+      <%# <%= mail_to(registration.email, registration.name) %> 
+      <%= link_to registration.user.name, registration.user %>
+      <span class="date">
+        <%= time_ago_in_words(registration.created_at) %> ago
+      </span>
       (<%= registration.how_heard %>)
     </li>
     <%= link_to 'Edit', edit_event_registration_path(@event, registration), class: 'button' %>

@@ -1,6 +1,11 @@
 require "rails_helper"
 
 describe "edit an event" do 
+  before do  
+    admin = User.create(user_attributes(admin: true))
+    sign_in(admin)
+  end
+  
   it "will display event details" do
     event = Event.create(event_attributes)
 

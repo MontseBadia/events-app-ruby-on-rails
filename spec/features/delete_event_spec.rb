@@ -1,8 +1,13 @@
 require "rails_helper"
 
 describe "Deleting an event" do #how is this working if link delete does not work?
+  before do  
+    admin = User.create(user_attributes(admin: true))
+    sign_in(admin)
+  end
+  
   it "deletes the event and shows the listing page" do 
-    event = Event.create(event_attributes)
+    event = Event.create(event_attributes(name: 'Yepa'))
 
     visit event_path(event)
 
